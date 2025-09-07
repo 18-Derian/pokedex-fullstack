@@ -23,6 +23,22 @@ async function objetoPokemon(datoPokemon) {
     if (data) {
         const data_especie = await mostrarEspecie(data.species.url);
 
+        let descripciones = data_especie.flavor_text_entries
+            .filter(entry => entry.language?.name === 'es')
+            .map(d => d.flavor_text.replace(/\n|\f/g, " "));
+
+        if (descripciones.length === 0) {
+            descripciones = data_especie.flavor_text_entries
+                .filter(entry => entry.language?.name === 'en')
+                .map(d => d.flavor_text.replace(/\n|\f/g, " "))
+        }
+
+        descripciones = [...new Set(descripciones)];
+
+        if (descripciones.length === 0) {
+            descripciones = "No se encontraron descripciones para este pokémon";
+        }
+
         const pokemon = new Pokemon({
             abilities: data.abilities,
             height: data.height,
@@ -33,13 +49,15 @@ async function objetoPokemon(datoPokemon) {
             types: data.types,
             weight: data.weight,
             color: data_especie.color,
-            flavor_text_entries: data_especie.flavor_text_entries
+            flavor_text_entries: descripciones
         });
 
         return pokemon;
-    }else {
+    } else {
         return null;
     }
 }
 
-module.exports = {objetoPokemon};
+module.exports = {
+    objetoPokemon
+};
