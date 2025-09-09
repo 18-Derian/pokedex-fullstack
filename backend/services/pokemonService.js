@@ -58,6 +58,21 @@ async function objetoPokemon(datoPokemon) {
     }
 }
 
+async function fetchPokemonList(url = "https://pokeapi.co/api/v2/pokemon?offset=0&limit=20") {
+    try {
+        const response = await axios.get(url);
+        return {
+            results: response.data.results, // nombres + urls de pokémon
+            next: response.data.next,
+            previous: response.data.previous,
+            count: response.data.count
+        };
+    } catch (error) {
+        return null;
+    }
+}
+
 module.exports = {
-    objetoPokemon
+    objetoPokemon,
+    fetchPokemonList
 };

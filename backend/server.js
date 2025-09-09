@@ -8,7 +8,8 @@ const app = express();
 // habilitar CORS
 app.use(cors());
 
-app.use("/api/pokemon", pokemonRoutes);
+//app.use("/api/pokemon", pokemonRoutes);
+app.use("/api", pokemonRoutes);
 
 const PORT = 3001;
 app.listen(PORT, () => {
